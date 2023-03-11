@@ -1,0 +1,51 @@
+.Tank{
+    margin: 20px auto;
+    width: 600px;
+    height: 800px;
+    
+}
+hr{
+    width: 80%;
+}
+h2{
+    font-size: 30px;
+    font-family: 仿宋;
+    text-align: center;
+    color: blue;
+
+}
+h4{
+    color: rgb(207, 50, 155);
+    text-align: center;
+
+}
+h5{
+    color:rgb(32, 165, 83);
+    text-align: right;
+}
+h6{
+    color: rgb(48, 49, 48);
+    text-align: center;
+}
+span{
+    color: red;
+}
+h1{
+    color: rgb(105, 167, 154);
+    font-family: 黑体;
+    text-align: center;
+
+}
+h3{
+    text-align: center;
+    color: rgb(168, 65, 115);
+}
+p{
+    text-align: center;
+    color: rgb(197, 77, 173);
+}
+.Star{
+    text-indent: 2em;
+}
+
+
