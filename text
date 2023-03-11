@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>来自 Mr 尚</title>
+    <style>
+        .First{
+            color: brown;
+            font-size: 20px;
+            text-align: center;
+        }
+        #name:hover
+        {
+            text-decoration:voerline;
+            font-size: 40px;
+            color: yellow;
+        }
+    </style>
+</head>
+<body background="./start.jpg">
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+    <a  href="./poem.html"><p id = "name" class = "First">点击这里，解锁惊喜！</p></a>
+
+    
+</body>
+</html>
