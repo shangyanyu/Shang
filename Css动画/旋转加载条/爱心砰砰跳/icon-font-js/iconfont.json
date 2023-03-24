@@ -1,0 +1,58 @@
+{
+  "id": "3971921",
+  "name": "icon- study",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon-",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "975228",
+      "name": "爱心",
+      "font_class": "aixin",
+      "unicode": "e629",
+      "unicode_decimal": 58921
+    },
+    {
+      "icon_id": "8758476",
+      "name": "爱心",
+      "font_class": "aixin1",
+      "unicode": "e6bb",
+      "unicode_decimal": 59067
+    },
+    {
+      "icon_id": "17719669",
+      "name": "打电话",
+      "font_class": "dadianhua",
+      "unicode": "e69b",
+      "unicode_decimal": 59035
+    },
+    {
+      "icon_id": "1425525",
+      "name": "Settings",
+      "font_class": "shezhi",
+      "unicode": "e607",
+      "unicode_decimal": 58887
+    },
+    {
+      "icon_id": "1440660",
+      "name": "home",
+      "font_class": "home",
+      "unicode": "e653",
+      "unicode_decimal": 58963
+    },
+    {
+      "icon_id": "4276969",
+      "name": "WiFi",
+      "font_class": "WiFi",
+      "unicode": "e62c",
+      "unicode_decimal": 58924
+    },
+    {
+      "icon_id": "18253059",
+      "name": "Twitter",
+      "font_class": "tuite",
+      "unicode": "e627",
+      "unicode_decimal": 58919
+    }
+  ]
+}
