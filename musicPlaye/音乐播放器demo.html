@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>音乐播放器</title>
+<!-- 引用图标库 -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        *{
+            margin: 0px;
+            padding: 0px;
+            /* 怪异盒子模型 */
+            box-sizing: border-box;
+        }
+        body{
+            height: 100vh;
+            background-color:rgb(231, 155, 155);
+
+            /* 使内容 居中 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        /* .player-control{
+            width: 200px;
+            height: 200px;
+            background-color:black;
+        } */
+
+        .player-warp{
+            width: 360px;
+            position: relative;
+        }
+        .player-warp .player-control{
+            width: 360px;
+            height: 80px;
+            padding:20px 30px;
+            background-color: #fff;
+            border-radius: 15px;
+            display: flex;
+            /* 使容器内部的 内容 水平两端对齐 */
+            justify-content: space-between;
+            z-index: 10;
+        }
+        .player-control .cover{
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            margin-top: -60px;
+            padding: 6px;
+            border-radius: 50%;
+            /* 添加旋转动画 */
+            animation : zhuan 5s infinite linear;
+                /* 设置动画状态     pasued / running*/
+            animation-play-state: paused;
+
+        }
+
+        .player-control .control{
+            width: 60%;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+        }
+        .control i{
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 26px;
+            color :#b3b0b0;
+            /* 指针样式 */
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+        .control i:hover{
+            border-radius: 6px;
+            background-color: rgba(71,70,70,0.2);
+            color: #fff;
+
+        }
+/*     /*     .player-control .cover::before{
+            /* 通过 content 元素来为 ：：before 设置内容  此元素默认为行内元素*/
+          /*   content: " ";
+            display :inline-block;
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            position: absolute;
+            top :50% ;
+            left: 50% ;
+            transform:translate(50%,50%);
+        }  */
+        .cover img{
+            width: 100%;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.4s;
+        }
+
+        .player-warp .player-info{
+            position: absolute;
+            /* 相对父亲元素 的  宽度*/
+            width: 90%;
+            /* top :-100%; */
+            top: 0%;
+            left: 5%;
+            padding: 10px;
+            transform: rotateX(-50%);
+            z-index: -1;
+            background: rgba(255,255,255,0.65);
+            border-radius: 6px;
+            border: 1px solid rgba(255, 255, 255, 0,18);
+            display: flex;
+            /* 容器 内部 居右显示 */
+            justify-content: flex-end;
+            /* opacity:  0/1   0: 透明状态  1:不透明状态 */
+            opacity: 0;
+            transition: all 0.8s;
+        }
+        .player-warp .info{
+            width: 60%;
+            font-size: 10px;
+        }
+        .info .name{
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .info .singer-album{
+            color: #757474;
+            line-height: 20px;
+        }
+        .info .music_progress{
+            width: 100%;
+        }
+        .music_progress .music_progress_top{
+            display: flex;
+            justify-content: space-between;
+            color:rgb(123, 10, 10);
+            line-height: 20px;
+        }
+        .music_progress .music_progress_bar{
+            width: 100%;
+            height: 3px;
+            background-color: #cccaca;
+            border-radius: 10px;
+            margin-top: 3px;
+
+        }
+   
+        .music_progress .music_progress_line{
+            /* width: 50%; */
+            height: 100%;
+            background-color:#f2709b;
+            /* animation: progress 238s linear;
+            animation-play-state: paused; */
+        }
+
+     /* 音乐列表样式 */
+
+        .music_list{
+            border-radius: 20px;
+            position:fixed;
+            right: -200px;
+            /* right: 0px; */
+            width: 200px;
+            height: 400px;
+            background-color: #fff;
+            cursor: pointer;
+            transition: all 0.4s;
+            /* opacity: 1; */
+            opacity: 0;
+        }
+        .music_list .list{
+            color: brown;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10%;
+            position: relative;
+            left: 15%;
+            
+        }
+        .list li{
+            transition: all 0.7s;
+        }
+        .list li:hover{
+            background-color: pink;
+        }
+
+        .current_song{
+            background-color: rgb(222, 113, 133);
+        }
+
+        @keyframes zhuan {
+            0% {
+                transform: rotate(0deg);
+            }
+            100%{
+                transform: rotate(360deg);
+            }
+        }  
+        /* @keyframes progress {
+            0%{
+                width: 0%;
+            }
+            100%{
+                width: 100%;
+            }
+            
+        }       */
+    </style>
+</head>
+<body>
+    <!-- 音乐播放器 -->
+    <div class="player-warp">
+        <!-- 歌曲信息卡片 -->
+        <div class="player-info" id="information">
+           <div class="info">
+            <div class="name">すずめの戸締まり</div>
+            <div class="singer-album">RADWIMPS/十明 -- すずめfeat </div>
+            <!-- 进度条 -->
+            <div class="music_progress">
+                <div class="music_progress_top" id = "bar-time">
+                    <span class="crruent-time">00:00</span>
+                    <span class="time">03:58</span>
+                </div>
+                <div class="music_progress_bar">
+                    <div class="music_progress_line" id = "progress"></div>
+                </div>
+            </div>
+           </div>
+        </div>
+        <!-- 音乐播放器 -->
+        <div class="player-control">
+            <!-- 播放封面 -->
+            <div class="cover" id = "cover">
+                <img src="http://p1.music.126.net/jHIFF-TBXfG3hbh4IOnudQ==/109951167911814845.jpg?param=300x300" alt="封面">
+            </div>
+            <!-- 播放控制 -->
+            <div class="control">
+                
+                <i class="fa fa-step-backward" id = "fore"></i>
+                <i class="fa fa-play" id="paly"></i>
+                <i class="fa fa-step-forward" id = "next"></i>
+                <i class="fa fa-reorder" id="list"></i>
+            </div>
+        </div>
+    </div>
+    <!-- 音乐列表 -->
+    <div class="music_list" id="music_list">
+        <ol class="list">
+            
+            <li class="current_song">铃芽之旅</li>
+            <li>平凡之路</li>
+            <li>多远都要在一起</li>
+            <li>羡慕风羡慕雨</li>
+        </ol>
+    </div>
+    <!-- 静态处理框 -->
+
+    <audio src= 'music.mp3'  class = "music" ></audio>
+
+<script>
+
+    /********************************** 变量的声明 ********************************** */
+//  保存音乐信息
+musicInformation = [
+    {
+        name:'すずめの戸締まり',
+        singer:'RADWIMPS/十明 -- すずめfeat',
+        endTime : '03:58',
+        totalTime :238,
+        musicUrl: './music.mp3',
+        imgUrl:'http://p1.music.126.net/jHIFF-TBXfG3hbh4IOnudQ==/109951167911814845.jpg?param=300x300',
+        idCard:0
+
+    },
+    {
+        name:'平凡之路',
+        singer:'朴树',
+        endTime : '05:01',
+        totalTime :5*60+1,
+        musicUrl: './平凡之路.mp3',
+        imgUrl:'http://img.5nd.com//photo/2013album/20147/63524.jpg',
+        idCard:1
+    },
+    {
+        name:'多远都要在一起',
+        singer:'邓紫棋',
+        endTime : '03:38 ',
+        totalTime :3*60+38,
+        musicUrl: './多远都要在一起.mp3',
+        imgUrl:'http://img.5nd.com/photo/2013album/20152/66073.jpg',
+        idCard:2
+    },
+    {
+        name:'羡慕风羡慕雨',
+        singer:'怪阿姨',
+        endTime : '01:41 ',
+        totalTime :1*60+41,
+        musicUrl: 'http://music.163.com/song/media/outer/url?id=2077781557.mp3',
+        imgUrl:'http://p2.music.126.net/GqkMWzflPZBjnb1Lg2W6Jw==/109951168879429065.jpg?param=300x300',
+        idCard:3
+    }
+
+
+]
+    // 保存播放时间 
+    let playTime = 0    //保存计时器
+    let countTime = 0   ///保存时间的流逝
+    let currentSong = 0   //记录当前歌曲
+    let progress = 0;   //保存滚动条动画
+    let musicCanPlay = 1
+
+
+   const music = document.querySelector('.music')
+   
+   //获取控制按钮
+   const bt1 = document.querySelector('#paly')
+   const bt2 = document.querySelector('#fore')
+   const bt3 = document.querySelector('#next')
+   const bt4 = document.querySelector('#list')
+
+    //获取唱片
+    const cover = document.querySelector('#cover')
+    
+    // 获取 歌曲信息卡片
+    const information = document.querySelector('#information') 
+
+   //获取进度条
+   const bar = document.querySelector('#progress')
+   // 获取进度条时间 
+   const barTime = document.querySelector('#bar-time')
+
+//    获取播放列表
+    const list = document.querySelector('#music_list')
+
+    //初始化 播放状态
+   bt1.dataset.playing = 1
+   progress = new Animation(progressAnimation(currentSong),Document.timeline)      //进度条的初始化
+//    console.log(progress)
+    music.dataset.playState = 'runnig'
+
+/*  ********************************相关  的 函数********************** *************/
+
+// 重置 进度条
+function reRender(){
+
+    // 重置音乐加载状态
+    canplay = 0
+   
+
+    // 重置进度条
+    progress = new Animation(progressAnimation(),Document.imeline)   //更新滚动条动画
+
+    //清楚原来的计时器 并重新计时 
+    console.log('定时器已清除')
+    clearInterval(playTime)
+    // 重置 播放时间 和 总时长
+    countTime = 0
+    // progress.play()
+    // music.addEventListener()
+    barTime.children[0].innerHTML = '00:00'
+    playRunning()
+    
+   /*  music.dataset.playState = "running"
+    barTime.innerHTML = getTime(countTime)
+        playTime = setInterval(() => {
+                countTime++
+                //  console.log(getTime(countTime))
+                barTime.innerHTML = getTime(countTime)
+            }, 1000); */
+            let musicBgc = document.querySelector('.current_song')
+            musicBgc.classList.remove('current_song')
+            list.children[0].children[currentSong].classList.add('current_song')
+}
+// 播放暂停函数
+function palyPause(){
+
+    // 判断歌曲是否已播放完
+    if(music.dataset.playState == "finished")
+    {
+                    countTime = 0
+                    music.dataset.playState = "running"
+                    barTime.children[0].innerHTML = getTime(countTime)
+                }
+    music.pause()
+            console.log('pause')
+
+            // 播放状态 和 暂停按钮
+            bt1.dataset.playing = 1
+            bt1.classList.add('fa-play')
+            bt1.classList.remove('fa-pause')
+
+            /* 暂停 唱片 旋转 / 进度条滚动 */
+            cover.style['animation-play-state'] = 'paused'
+            progress.pause()
+            console.log(music.pause())
+
+            //  暂停 播放时间的计时
+            clearInterval(playTime)
+
+            //  使信息卡片隐身
+            // information.style.top = '0%'
+            // information.style.opacity = '0'
+}
+// 继续播放函数
+function playRunning(){
+    
+            music.play()
+
+            bt1.dataset.playing = 0
+
+            bt1.classList.remove('fa-play')
+            bt1.classList.add('fa-pause')
+
+            /* 唱片旋转 和 进度条 增长 */
+            cover.style['animation-play-state'] = 'running'
+            progress.play()
+            // console.log(progress)
+            // console.log(bar.style['animation-play-state'])
+            
+        //    if(music.canplay == true){
+                // 启动 播放时间 
+             playTime = setInterval(() => {
+                countTime++
+                //  console.log(getTime(countTime))
+                barTime.children[0].innerHTML = getTime(countTime)
+                }, 1000);   
+
+    // }
+
+            //显示 歌曲信息 卡片
+            // console.log(information)
+            information.style.top = '-100%'
+            information.style.opacity = '1'
+}
+// 0. 进度条 动画 函数
+function progressAnimation()
+{
+    let num  = musicInformation[currentSong].totalTime
+            let Key = new KeyframeEffect(
+            bar,    //添加动画的元素
+            [{
+                width : '0%'
+            },
+            {
+                width : '100%'
+            }],{
+                duration :num*1000,      //毫秒
+                fill:"forwards"
+            })
+            console.log(musicInformation[currentSong].totalTime)
+            return Key
+}
+
+// 1. 音乐播放函数
+function music_play()
+{
+    // this 指代被 调用者 即 函数的 调用者
+    console.log(this)
+    if(this.dataset.playing == '1')
+    {
+            if(musicCanPlay == 1)
+            {
+                playRunning()
+                
+            }
+        }
+        else{
+            palyPause()
+
+}
+}
+
+// 2。 将秒数转化为 时间
+    function getTime( count )
+    {
+        return ` ${(count/60%60)>9?Math.floor(count/60%60):'0'+ Math.floor(count/60%60)}:${(count%60)>9?Math.floor(count%60):'0'+ Math.floor(count%60)}`
+    }
+
+    // 文字图片的更新
+    function upData(){
+
+        // 更新封面
+            cover.children[0].src = musicInformation[currentSong].imgUrl
+            information.children[0].children[0].innerHTML = musicInformation[currentSong].name
+            information.children[0].children[1].innerHTML = musicInformation[currentSong].singer
+             // 更新音乐
+             music.src = musicInformation[currentSong].musicUrl
+             
+             // 更新音乐总时长
+            barTime.children[1].innerHTML = musicInformation[currentSong].endTime
+    }
+// 3. 下一首歌
+    function nextSong(){
+
+          // 如果为最后一首歌曲，则不做任何操作 / 若为不是 则 播放下一首歌
+        if(musicInformation[currentSong].idCard == musicInformation.length-1)
+        {
+            alert('这是最后一首歌啦！')
+        }
+        else{
+            currentSong++
+            // 更新封面
+            upData()
+            // 更新进度条 的动画
+            reRender()
+        }
+        
+    }
+
+// 4. 上一首歌
+    function foreSong(){
+
+            // 如果为第一首歌曲，则不做任何操作 / 若为不是 则 播放上一首歌
+            if(musicInformation[currentSong].idCard == 0)
+        {
+            alert('这已经是第一首歌啦！')
+        }
+        else{
+            currentSong--
+            // 更新封面
+            upData()
+            // 更新进度条 的动画 并播放音乐
+            reRender()
+        }
+        
+    }
+    
+    /* **************************** 为播放器添加 事件  **********************************/
+    
+    // 为封面添加点击事件 让封面可以显示和隐藏
+    cover.children[0].addEventListener('click',()=>{
+        if(information.style.opacity == '0')
+        {
+            //显示 歌曲信息 卡片
+            // console.log(information)
+            information.style.top = '-100%'
+            information.style.opacity = '1'
+        }
+        else{
+            //隐藏 歌曲信息 卡片
+            // console.log(information)
+            information.style.top = '0%'
+            information.style.opacity = '0'
+        }
+    })
+
+    bt1.addEventListener('click',music_play)
+    bt2.addEventListener('click',foreSong)
+    bt3.addEventListener('click',nextSong)
+    bt4.addEventListener('click',()=>{
+
+        // alert('该功能还没开发')
+        if(list.style.opacity == 0)
+        {
+            // 显示列表
+            list.style.right = '0px'
+            list.style.opacity = 1
+        }
+        else{
+            // 隐藏列表
+            list.style.right = '-200px'
+            list.style.opacity = 0
+        }
+
+    })
+    
+    console.log(list.children[0].children)
+    for(let i = 0;i<list.children[0].children.length;i++)
+    {
+        list.children[0].children[i].addEventListener('click',()=>{
+            // alert(`i = ${i} i wo bei dian ji l `)
+            currentSong = i
+            upData()
+            reRender()
+        })
+    }
+
+    // 监听动画完成事件
+        //animationend 事件可以 监听 某元素上的动画 完成 
+    // bar.addEventListener('animationend',(event)=>
+    // {
+    //     console.log('播放结束')
+    // })
+    // cover.addEventListener('animationend',()=>{
+    //     console.log('cover 完成了')
+    // })
+
+
+// 对 audio 标签添加 监听事件， 监听是否播放完毕
+
+    music.addEventListener('ended',()=>{
+    console.log('音乐播放完毕')
+    // 播放暂停 并更新进度条
+    music.dataset.playState = 'finished'
+        palyPause();
+        console.log(music.dataset.playState)
+    })
+    music.addEventListener('canplaythrough',()=>{
+        musicCanPlay = 1
+    })
+
+</script>
+</body>
+</html>
