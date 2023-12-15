@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spring
+    </title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<style>
+    *{
+        margin: 0px;
+        padding:0px;
+             /* 怪异盒子模型 */
+        box-sizing: border-box;
+    }
+    body{
+        background-color: rgb(178, 82, 82);
+        height: 100vh;
+         /* 设置弹性 页面 */
+         display: flex;
+         /* 水平居中 */
+         justify-content: center;
+         /* 垂直居中 */
+         align-items: center; 
+    }
+    .big-box{
+        /* display: flex;
+        justify-content: center; */
+        height: 250px;
+        /* border: 1px solid black; */
+        position: relative;
+    }
+    /* 跳动爱心 */
+    .heart_spring{
+        box-sizing: border-box;
+        display: flex;
+        width: 450px;
+        height: 250px;
+        /* border: 1px solid black; */
+        justify-content: space-around;
+        /* align-items: center; */
+    }
+    .heart_spring div{
+        border-radius: 15px;
+    }
+    .heart_1{
+        /* margin: 0px 10px; */
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love1 6s infinite;
+        animation-direction: alternate;
+        /* animation-duration: 4s; */
+    }
+    .heart_2{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love2 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 0.2s;
+    }
+    .heart_3{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love3 6s infinite;
+        animation-direction: alternate;
+        animation-delay: 0.4s;
+    }
+    .heart_4{
+        height: 30px;
+        width: 8%;
+        /* height: 100%; */
+        background-color: pink;
+        animation: love4 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 0.6s;
+    }.heart_5{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love5 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 0.8s;
+    }.heart_6{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love4 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 1.0s;
+    }
+    .heart_7{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love3 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 1.2s;
+    }
+    .heart_8{
+        /* margin: 0px 10px; */
+
+        width: 8%;
+        height: 30px;
+
+        /* height: 100%; */
+        background-color: pink;
+        animation: love2 6s infinite;
+        animation-direction: alternate;
+        animation-delay: 1.4s;
+    }
+    .heart_9{
+        /* margin: 0px 10px; */
+        width: 8%;
+        height: 30px;
+        /* height: 100%; */
+        background-color: pink;
+        animation: love1 6s infinite ;
+        animation-direction: alternate;
+        animation-delay: 1.6s;
+    }
+
+    /* 音乐播放器 */
+    .music_player{
+
+        /* 设置播放器的位置 */
+        position: fixed;
+        bottom: 0px;
+        width: 360px;
+        /* background-color: pink; */
+    }
+
+    .music_player .music_player_control{
+
+        width: 360px;
+        height: 80px;
+        padding:20px 30px;
+        background-color:pink;
+        border-radius: 15px;
+        display: flex;
+        /* 使容器内部的 内容 水平两端对齐 */
+        justify-content: space-between;
+        z-index: 10;
+        }
+/* 封面样式 */
+    .music_player_control .music_cover{
+            width: 100px;
+            height: 100px;
+            background-color: #fff;
+            margin-top: -60px;
+            padding: 6px;
+            border-radius: 50%;
+            /* 添加旋转动画 */
+            animation : zhuan 5s infinite linear;
+                /* 设置动画状态     pasued / running*/
+            animation-play-state: paused;
+            
+        }
+    .music_cover img{
+        width: 100%;
+        border-radius: 50%;
+        }
+/* 控制器样式 */
+
+    .music_player_control .control{
+        width: 60%px;
+        /* height: 100%; */
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+    }
+    .control i{
+
+     /* width:40px; */
+        width: 40px;
+        height: 40px;
+        text-align: center;
+        line-height: 40px;
+        font-size: 26px;
+        color :#b3b0b0;
+        /* 指针样式 */
+        cursor: pointer;
+        transition: all 0.4s;
+     }
+     .control i:hover{
+        border-radius: 6px;
+        background-color: rgba(71,70,70,0.2);
+        color: #fff;
+     }
+ /* 信息卡片 */
+    .music_player .music_information{
+        position: absolute;
+        /* 相对父亲元素 的  宽度*/
+        width: 90%;
+        top :-100%;
+        /* top: 0%; */
+        left: 5%;
+        padding: 10px;
+        transform: rotateX(-50%);
+        z-index: -1;
+        background: pink;
+        border-radius: 6px;
+        border: 1px solid rgba(255, 255, 255, 0,18);
+        display: flex;
+        /* 容器 内部 居右显示 */
+        justify-content: flex-end;
+        /* opacity:  0/1   0: 透明状态  1:不透明状态 */
+        /* opacity: 0; */
+        opacity: 1;
+        transition: all 0.8s;
+         }
+
+    .music_information .information{
+        width: 60%;
+        font-size: 10px;
+    }
+    .information .name{
+
+        font-size: 14px;
+        font-weight: bold;
+    }
+    .information .singer{
+        color: #757474;
+        line-height: 20px;
+    }
+
+/* 进度条动画 */
+    .information .progress{
+        width: 100%;
+    }
+
+    .progress .time{
+        display: flex;
+        justify-content: space-between;
+        color:rgb(123, 10, 10);
+        line-height: 20px;
+    }
+
+     .progress .out_bar{
+        width: 100%;
+        height: 3px;
+        background-color: #cccaca;
+        border-radius: 10px;
+        margin-top: 3px;
+
+        }
+     .out_bar .inner_bar{
+        height: 100%;
+        width: 50%;
+        background-color:#f2709b;
+     }
+
+/* 音乐列表 */
+.music_list{
+            border-radius: 20px;
+            position:fixed;
+            /* right: -200px; */
+            right: 0px;
+            /* top: 400px; */
+            width: 200px;
+            height: 400px;
+            background-color:pink;
+            cursor: pointer;
+            transition: all 0.4s;
+            opacity: 1;
+            /* opacity: 0; */
+        }
+
+    .music_list .list{
+            color: brown;
+            font-size: 20px;
+            font-weight: bold;
+            margin: 10%;
+            position: relative;
+            left: 15%;
+            
+        }
+    .list li{
+        border-radius: 5px;
+        width: 90%;
+        transition: all 0.7s;
+    }
+    .list li:hover{
+        background-color: rgb(222, 113, 133);
+     }
+
+    .current_song{
+        background-color: rgb(222, 113, 133);
+    }
+
+/* 文字样式 */
+    .text{
+        position: fixed;
+        left: 0px;
+        top: 0px;
+        font: 20px;
+        font-weight: bold;
+        color: pink;
+        /* font-style: "宋体"; */
+    }
+/* 关键帧动画 */
+    /* 唱片封面动画 */
+        @keyframes zhuan {
+        0% {
+            transform: rotate(0deg);
+        }
+       100%{
+           transform: rotate(360deg);
+        }
+    }  
+
+    /* 爱心跳动动画 */
+
+    @keyframes love1{
+
+            30%,50%{
+                height: 70px;
+                transform:translateY(-35px);
+            }
+            70%,100%{
+                height: 30px;
+                transform:translateY(0);
+            }
+          
+
+        }
+        @keyframes love2{
+            30%,50%{
+                height: 135px;
+                transform:translateY(-70px);
+            }
+            70%,100%{
+                height: 30px;
+                transform:translateY(0);
+            }
+        }
+            @keyframes love3{
+            30%,50%{
+                height: 180px;
+                transform:translateY(-90px);
+            }
+            70%,100%{
+                height: 30px;
+                transform:translateY(0);
+            }
+
+        }
+        @keyframes love4{
+            30%,50%{
+                height: 180px;
+                transform:translateY(-60px);
+            }
+            70%,100%{
+                height: 30px;
+                transform:translateY(0);
+            }
+        }
+        @keyframes love5{
+            30%,50%{
+                height: 180px;
+                transform:translateY(-40px);
+            }
+            70%,100%{
+                height: 30px;
+                transform:translateY(0);
+            }
+    
+        }
+</style>
+</head>
+<body>
+
+<div class="big-box">
+     <!-- 心跳 -->
+     <div class="heart_spring">
+        <div class="heart_1"></div>
+        <div class="heart_2"></div>
+        <div class="heart_3"></div>
+        <div class="heart_4"></div>
+        <div class="heart_5"></div>
+        <div class="heart_6"></div>
+        <div class="heart_7"></div>
+        <div class="heart_8"></div>
+        <div class="heart_9"></div>
+    
+    </div>
+</div>
+
+    <!-- 音乐播放器 -->
+    <div class="music_player">
+        <!-- 音乐控制部分 -->
+        <div class="music_player_control">   
+            <!-- 播放器封面 -->
+            <div class="music_cover">
+                <img src="http://p1.music.126.net/jHIFF-TBXfG3hbh4IOnudQ==/109951167911814845.jpg?param=300x300" alt="封面">
+            </div>
+            <!-- 控制按钮 -->
+                <div class="control">
+
+                <i class="fa fa-step-backward "></i>
+                <i class="fa fa-play" id="paly"></i>
+                <i class="fa fa-step-forward"></i>
+                <i class="fa fa-reorder "></i>
+
+                </div>
+                
+        </div>          
+        <!-- 信息卡片 -->
+        <div class = "music_information" >
+            <!-- 歌曲信息 -->
+            <div class="information">
+
+                <!-- 信息 -->
+               <div class="name">すずめの戸締まり</div>
+               <div class="singer">RADWIMPS/十明 -- すずめfeat </div>
+
+               <!-- 进度条和事件 -->
+               <div class="progress">
+
+                <!-- 时间 -->
+                <div class="time">
+                    <span>00:00</span>
+                    <span>03:58</span>
+                </div>
+
+                <!-- 进度条 -->
+                <div class="out_bar">
+                    <div class="inner_bar"> </div>
+                </div>      
+               </div>
+            </div>
+            
+        </div>
+
+    </div>
+<!-- 音乐列表 -->
+<div class="music_list" id="music_list">
+    <ol class="list">
+        
+        <li class="current_song">铃芽之旅</li>
+        <li>平凡之路</li>
+        <li>多远都要在一起</li>
+        <li>羡慕风羡慕雨</li>
+    </ol>
+</div>
+<!-- 文字 -->
+<div class="text">
+    我们已经走过
+</div>
+
+<!-- js -->
+<script>
+    /* **************************获取标签****************************** */
+    const text = document.querySelector('.text')
+
+    /* ***************************页面初始化************************** */
+    getTime()
+    /* ************************标签事件******************************** */
+
+    // 给文字加入定时器
+    setInterval(getTime,1000)
+
+    
+    /* *******************************相关函数*************************** */
+    // 获取 文本 函数
+    function getTime (){
+
+        const date = new Date()
+        const dateNow = +new Date()
+        const dateLast = +new Date('2022-06-22 00:00:00')
+        // console.log(dateLast)
+        const dateDays = parseInt((dateNow - dateLast)/24/60/60/1000)
+        const dateHours = date.getHours() 
+        const dateMins = date.getMinutes()
+        const dateSeconds = date.getSeconds()
+        text.innerHTML = `我们已经走过<span>${dateDays}</span>天<span>${dateHours}</span>小时
+                             <span>${dateMins}</span>分<span>${dateSeconds}</span>秒啦！`
+        }
+</script>
+</body>
+</html>
