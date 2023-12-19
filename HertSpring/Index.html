@@ -394,6 +394,93 @@
             }
     
         }
+
+
+/* 流星样式 */
+.star span{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: rgb(155, 155, 201);
+            position: absolute;
+            /* top: 0%; */
+            /* animation : star1 2s infinite linear;
+             */
+             animation: star1 2s infinite linear;
+
+            /* overflow: hidden; */
+        }
+        .star span::before{
+           
+            content: ' ';
+            transform: translateY(-50%);
+            position: absolute;
+            top: 50%;
+            width: 100px;
+            height: 3px;
+            border-radius: 10%;
+            background: linear-gradient(.25turn,rgb(155, 155, 201) 30%,#fff,transparent);
+        }
+
+        .star span:nth-child(1){
+            top: 0%;
+            animation-delay: 0.2s;
+            animation-duration: 1s;
+        }
+        .star span:nth-child(2)
+        {
+            top: -10%;
+            right: 75%;
+            animation-delay: 0.4s;
+            animation-duration: 1s;
+
+        }
+        .star span:nth-child(3)
+        {
+            top: -15%;
+            left: 50%;
+            animation-delay: 0.7s;
+            animation-duration: 1s;
+        }
+        .star span:nth-child(4)
+        {
+            top: -5%;
+
+            right: 20%;
+            animation-delay: 0.8s;
+            animation-duration: 1s;
+        }
+        .star span:nth-child(5)
+        {
+        top: 25%;
+
+            right: -20px;
+            animation-delay: 0.9s;
+            animation-duration: 1s;
+        }
+        .star span:nth-child(6)
+        {
+        top: 30%;
+
+            right: -30px;
+            animation-delay: 1s;
+            animation-duration: 1s;
+        }
+
+        /* 流星 动画 */
+        @keyframes star1 {
+            0%{
+                transform: rotate(315deg) translateX(0px);
+            }
+            70%{
+                opacity: 1;
+            }
+            100%{
+                transform: rotate(315deg) translateX(-700px);
+                opacity: 0;
+            }
+        }
+
 </style>
 </head>
 <body>
@@ -477,6 +564,16 @@
 </div>
 <!-- 音乐播放器标签 -->
 <audio src= 'http://music.163.com/song/media/outer/url?id=22706980.mp3'  class = "music" ></audio>
+<!-- 流星 -->
+<div class="star">
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+   <span></span>
+</div>
+
 <!-- js -->
 <script>
 /* ********************变量声明*********************************** */
@@ -570,7 +667,7 @@ musicInformation = [
     music.dataset.playState = 'runnig'
     // 播放页面
     // playRunning()
-    initPlay()
+    // initPlay()
     /* ************************标签事件******************************** */
 
     // 给文字加入定时器
